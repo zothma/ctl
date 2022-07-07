@@ -1,0 +1,1 @@
+sources = files('ctl.c', 'config.c')
