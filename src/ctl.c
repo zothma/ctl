@@ -70,6 +70,11 @@ void parse_arguments(int argc, char *argv[]) {
         fprintf(stderr, "Unrecognized category '%s'. Use -h to get help\n", argv[1]);
         exit(EXIT_FAILURE);
     }
+
+    if (!valid_option) {
+        fprintf(stderr, "Unrecognized option '%s' for category '%s'. Use -h to get help\n", argv[2], argv[1]);
+        exit(EXIT_FAILURE);
+    }
 }
 
 int main(int argc, char *argv[]) {

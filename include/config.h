@@ -6,5 +6,6 @@
 #define CONFIG_INACCESSIBLE -2
 
 int load_config(config_t *conf);
+void get_config(config_t *config, char *path, char **result);
 
 #endif
