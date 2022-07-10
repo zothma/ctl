@@ -8,14 +8,9 @@
 #include "config.h"
 #include "util.h"
 
-#define VOLUME_OPTIONS "up:down"
-
-enum category { VOLUME, NONE };
-typedef enum category category;
-
 void usage(const char *progname, FILE *stream);
 category detect_category(char *user_param);
-void parse_arguments(int argc, char *argv[]);
+void parse_arguments(int argc, char *argv[], category *cat);
 
 void usage(const char *progname, FILE *stream) {
     fprintf(stream, "Usage : %s <category> <option> [<value>]\n", progname);
@@ -39,9 +34,8 @@ category detect_category(char *user_param) {
     return result;
 }
 
-void parse_arguments(int argc, char *argv[]) {
+void parse_arguments(int argc, char *argv[], category *cat) {
     const char *progname = basename(argv[0]);
-    category cat;
     bool valid_option;
 
     if (argc == 1) {
@@ -54,16 +48,17 @@ void parse_arguments(int argc, char *argv[]) {
         exit(EXIT_SUCCESS);
     }
 
-    cat = detect_category(argv[1]);
-    if (argc == 2 && cat != NONE) {
+    *cat = detect_category(argv[1]);
+    if (argc == 2 && *cat != NONE) {
         fprintf(stderr, "Missing option for category '%s'. Use -h to get help\n", argv[1]);
         exit(EXIT_FAILURE);
     }
 
 
-    switch (cat) {
+    switch (*cat) {
     case VOLUME:
-        valid_option = string_in_list(argv[2], VOLUME_OPTIONS, ":");
+        char volume_options[] = "up:down";
+        valid_option = string_in_list(argv[2], volume_options, ":");
         break;
 
     default:
@@ -80,8 +75,9 @@ void parse_arguments(int argc, char *argv[]) {
 int main(int argc, char *argv[]) {
     int result;
     config_t user_config;
+    category cat = NONE;
 
-    parse_arguments(argc, argv);
+    parse_arguments(argc, argv, &cat);
 
     result = load_config(&user_config);
     if (result == CONFIG_NOT_FOUND) {
@@ -89,6 +85,8 @@ int main(int argc, char *argv[]) {
     } else if (result == CONFIG_INACCESSIBLE) {
         printf("The config file could not be used");
     }
+
+    execute_module(&user_config, cat, argv);
 
     return EXIT_SUCCESS;
 }

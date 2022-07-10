@@ -43,9 +43,9 @@ int load_config(config_t *result) {
 }
 
 void get_config(config_t *config, char *path, char **result) {
-    int result = config_lookup_string(config, path, result);
+    int ret = config_lookup_string(config, path, result);
     
-    if (result == CONFIG_FALSE) {
+    if (ret == CONFIG_FALSE) {
         printf("The configuration file misses the following argument: '%s'\n", path);
         exit(EXIT_FAILURE); 
     }
