@@ -8,6 +8,12 @@
 #include "config.h"
 #include "util.h"
 
+#define VOLUME_NAMES "v:volume"
+#define VOLUME_PARAMS "up:down"
+#define BRIGHTNESS_NAMES "b:brightness:light"
+#define BRIGHTNESS_PARAMS "up:down"
+#define CATEGORIES_NAMES {VOLUME_NAMES, BRIGHTNESS_NAMES}
+
 void usage(const char *progname, FILE *stream);
 category detect_category(char *user_param);
 void parse_arguments(int argc, char *argv[], category *cat);
@@ -17,13 +23,14 @@ void usage(const char *progname, FILE *stream) {
     fprintf(stream, "        %s (-h | --help)\n\n", progname);
     fprintf(stream, "Possible categories :\n");
     fprintf(stream, "    v, volume [up | down]\n");
+    fprintf(stream, "    b, brightness, light [up | down]\n");
 }
 
 category detect_category(char *user_param) {
     // Checks what category_name refers to
-    const int NB_CATEGORY = 1;
-    char category_names[][20] = {"v:volume"};
-    category category_list[] = {VOLUME};
+    const int NB_CATEGORY = 2;
+    char category_names[][20] = CATEGORIES_NAMES;
+    category category_list[] = {VOLUME, BRIGHTNESS};
     category result = NONE;
 
     for (int i = 0; i < NB_CATEGORY; i++) {
@@ -57,8 +64,13 @@ void parse_arguments(int argc, char *argv[], category *cat) {
 
     switch (*cat) {
     case VOLUME:
-        char volume_options[] = "up:down";
+        char volume_options[] = VOLUME_PARAMS;
         valid_option = string_in_list(argv[2], volume_options, ":");
+        break;
+
+    case BRIGHTNESS:
+        char brightness_options[] = BRIGHTNESS_PARAMS;
+        valid_option = string_in_list(argv[2], brightness_options, ":");
         break;
 
     default:

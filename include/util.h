@@ -3,7 +3,7 @@
 
 #include <stdbool.h>
 
-enum category { VOLUME, NONE };
+enum category { VOLUME, BRIGHTNESS, NONE };
 typedef enum category category;
 
 bool string_in_list(char *str, char *list, char *delimiter);

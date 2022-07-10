@@ -4,5 +4,6 @@
 #include <libconfig.h>
 
 int volume_module_execute_action(config_t *config, char *action);
+int brightness_module_execute_action(config_t *config, char *action);
 
 #endif

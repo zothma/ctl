@@ -27,6 +27,10 @@ void execute_module(config_t *config, category cat, char *argv[]) {
     case VOLUME:
         volume_module_execute_action(config, argv[2]);
         break;
+
+    case BRIGHTNESS:
+        brightness_module_execute_action(config, argv[2]);
+        break;
     
     default:
         break;
