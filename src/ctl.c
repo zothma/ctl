@@ -3,9 +3,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 
 #include "config.h"
 #include "util.h"
+
+#define VOLUME_OPTIONS "up:down"
 
 enum category { VOLUME, NONE };
 typedef enum category category;
@@ -39,6 +42,7 @@ category detect_category(char *user_param) {
 void parse_arguments(int argc, char *argv[]) {
     const char *progname = basename(argv[0]);
     category cat;
+    bool valid_option;
 
     if (argc == 1) {
         usage(progname, stderr);
@@ -51,7 +55,21 @@ void parse_arguments(int argc, char *argv[]) {
     }
 
     cat = detect_category(argv[1]);
-    printf("%d\n", (int)cat);
+    if (argc == 2 && cat != NONE) {
+        fprintf(stderr, "Missing option for category '%s'. Use -h to get help\n", argv[1]);
+        exit(EXIT_FAILURE);
+    }
+
+
+    switch (cat) {
+    case VOLUME:
+        valid_option = string_in_list(argv[2], VOLUME_OPTIONS, ":");
+        break;
+
+    default:
+        fprintf(stderr, "Unrecognized category '%s'. Use -h to get help\n", argv[1]);
+        exit(EXIT_FAILURE);
+    }
 }
 
 int main(int argc, char *argv[]) {
