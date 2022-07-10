@@ -10,6 +10,7 @@ enum category { VOLUME, NONE };
 typedef enum category category;
 
 void usage(const char *progname, FILE *stream);
+category detect_category(char *user_param);
 void parse_arguments(int argc, char *argv[]);
 
 void usage(const char *progname, FILE *stream) {
@@ -37,7 +38,7 @@ category detect_category(char *user_param) {
                 result = category_list[i];
 
             current_name = strtok(NULL, ":");
-        } while (current_name != NULL && result != NONE);
+        } while (current_name != NULL && result == NONE);
     }
 
     return result;
@@ -58,7 +59,6 @@ void parse_arguments(int argc, char *argv[]) {
     }
 
     cat = detect_category(argv[1]);
-    printf("%d\n", (int)cat);
 }
 
 int main(int argc, char *argv[]) {
