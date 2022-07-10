@@ -5,6 +5,7 @@
 #include <string.h>
 
 #include "config.h"
+#include "util.h"
 
 enum category { VOLUME, NONE };
 typedef enum category category;
@@ -24,21 +25,12 @@ category detect_category(char *user_param) {
     // Checks what category_name refers to
     const int NB_CATEGORY = 1;
     char category_names[][20] = {"v:volume"};
-    char *current_name;
     category category_list[] = {VOLUME};
     category result = NONE;
 
     for (int i = 0; i < NB_CATEGORY; i++) {
-        // We compare category_name to each existing category name (separated by
-        // ':') until we find the corresponding one
-        current_name = strtok(category_names[i], ":");
-
-        do {
-            if (strcmp(current_name, user_param) == 0)
-                result = category_list[i];
-
-            current_name = strtok(NULL, ":");
-        } while (current_name != NULL && result == NONE);
+        if (string_in_list(user_param, category_names[i], ":"))
+            result = category_list[i];
     }
 
     return result;
@@ -59,6 +51,7 @@ void parse_arguments(int argc, char *argv[]) {
     }
 
     cat = detect_category(argv[1]);
+    printf("%d\n", (int)cat);
 }
 
 int main(int argc, char *argv[]) {

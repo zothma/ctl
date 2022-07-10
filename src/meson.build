@@ -1,1 +1,1 @@
-sources = files('ctl.c', 'config.c')
+sources = files('ctl.c', 'config.c', 'util.c')
