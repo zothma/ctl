@@ -3,15 +3,8 @@
 
 #define CONFIG_PATH "/.config/ctl.conf"
 #define CONFIG_NOT_FOUND -1
+#define CONFIG_INACCESSIBLE -2
 
-typedef struct
-{
-    // volume
-    char *cmd_volume_up;
-    char *cmd_volume_down;
-    char *cmd_volume_get;
-} config;
-
-int get_config(config *conf);
+int load_config(config_t *conf);
 
 #endif
