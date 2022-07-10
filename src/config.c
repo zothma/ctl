@@ -39,5 +39,5 @@ int load_config(config_t *result) {
 
     free(confpath);
     fclose(conffile);
-    return 0;
+    return EXIT_SUCCESS;
 }
